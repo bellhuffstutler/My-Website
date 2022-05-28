@@ -1,0 +1,25 @@
+You cannot use reserved words as variable names/identifiers:
+    False   class   return  is      finally
+    None    if      for     lambda  continue
+    True    def     from    while   nonlocal
+    and     del     global  not     with
+    as      elif    try     or      yield
+    assert  else    import  pass
+    break   except  in      raise
+
+Variables:
+    named place where programmers can store data and later retrive the data using the variable name
+    Can choose the name
+    Can change the value of the variable
+
+Variable Name Rules:
+    Must start with a letter or underscore (underscore at start usually only used for variables specifically to talk to python)
+    Must consist of letters, numbers, and underscores
+    Case Sensitive
+        Good:       spam    eggs    spam23  _speed
+        Bad:        23spam  #sign   var.12
+        Different:  spam    Spam    SPAM
+
+Best Practice:
+    Name variables to help us remember what we intend to store in them (mnemonic = memory aid)
+
