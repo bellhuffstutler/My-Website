@@ -25,6 +25,9 @@ function getRandomFact(){
             return; // Bail out
           }
           readOutLoud(msg);
+          if(!speaking){
+            speaking = false;
+          }
       })
       .catch(err => {
           console.log(`error ${err}`)
@@ -32,4 +35,3 @@ function getRandomFact(){
 }
 
 document.querySelector('.button').addEventListener('click', getRandomFact)
-speaking = false;
