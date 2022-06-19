@@ -1,6 +1,5 @@
-
 let url = "https://uselessfacts.jsph.pl/random.json?language=en";
-
+let speaking = false;
 
 function readOutLoud(msg) {
   var speech = new SpeechSynthesisUtterance();
@@ -15,6 +14,8 @@ function readOutLoud(msg) {
 }
 
 function getRandomFact(){
+  if(speaking){return;}
+  speaking = true;
   fetch(url)
       .then(res => res.json()) // parse response as JSON
       .then(data => {
@@ -24,9 +25,6 @@ function getRandomFact(){
             return; // Bail out
           }
           readOutLoud(msg);
-          while (SpeechSynthesis.speaking) {
-            Event.stopPropagation();
-          } 
       })
       .catch(err => {
           console.log(`error ${err}`)
@@ -34,3 +32,4 @@ function getRandomFact(){
 }
 
 document.querySelector('.button').addEventListener('click', getRandomFact)
+speaking = false;
