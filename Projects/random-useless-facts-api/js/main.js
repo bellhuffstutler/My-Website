@@ -24,7 +24,7 @@ function getRandomFact(){
             return; // Bail out
           }
           readOutLoud(msg);
-          while (speech.speaking) {
+          while (SpeechSynthesis.speaking) {
             Event.stopPropagation();
           } 
       })
