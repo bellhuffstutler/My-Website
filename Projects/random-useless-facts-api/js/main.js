@@ -15,7 +15,6 @@ function readOutLoud(msg) {
 
 function getRandomFact(){
   if(speaking){return;}
-  speaking = true;
   fetch(url)
       .then(res => res.json()) // parse response as JSON
       .then(data => {
@@ -25,9 +24,6 @@ function getRandomFact(){
             return; // Bail out
           }
           readOutLoud(msg);
-          if(!speaking){
-            speaking = false;
-          }
       })
       .catch(err => {
           console.log(`error ${err}`)
