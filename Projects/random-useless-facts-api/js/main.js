@@ -1,7 +1,7 @@
 
 let url = "https://uselessfacts.jsph.pl/random.json?language=en";
 let isSpeaking = false;
-document.querySelector('.button').addEventListener('click', checkForSpeaking)
+
 
 let checkForSpeaking = function() {
   if (isSpeaking === false) {
@@ -10,8 +10,6 @@ let checkForSpeaking = function() {
     alert("Ya gotta wait for the fact to finish :0");
   }
 }
-
-
 
 function readOutLoud(msg) {
   var speech = new SpeechSynthesisUtterance();
@@ -43,3 +41,5 @@ function getRandomFact(){
           console.log(`error ${err}`)
       });
 }
+
+document.querySelector('.button').addEventListener('click', checkForSpeaking)
