@@ -1,5 +1,5 @@
 let url = "https://uselessfacts.jsph.pl/random.json?language=en";
-let speaking = false;
+let speaking = speechSynthesis.speaking;
 
 function readOutLoud(msg) {
   var speech = new SpeechSynthesisUtterance();
@@ -14,7 +14,7 @@ function readOutLoud(msg) {
 }
 
 function getRandomFact(){
-  if(speaking){return;}
+  if(speechSynthesis.speaking === true){return;}
   fetch(url)
       .then(res => res.json()) // parse response as JSON
       .then(data => {
