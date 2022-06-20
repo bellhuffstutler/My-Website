@@ -14,6 +14,7 @@ function readOutLoud(msg) {
 }
 
 function getRandomFact(){
+  if(window['speechSynthesis'] === undefined) {return;}
   if(speechSynthesis.speaking === true){return;}
   fetch(url)
       .then(res => res.json()) // parse response as JSON
