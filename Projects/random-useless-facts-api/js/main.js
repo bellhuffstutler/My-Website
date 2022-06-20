@@ -1,10 +1,12 @@
 let url = "https://uselessfacts.jsph.pl/random.json?language=en";
+let speaking = false;
+
 
 function checkForSpeechSynthesis() {
   if(window['speechSynthesis'] === undefined) {
     return; // Bail out
   } else {
-    let speaking = speechSynthesis.speaking;
+    speaking = speechSynthesis.speaking;
   }
 }
 
