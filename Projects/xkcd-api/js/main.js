@@ -1,48 +1,48 @@
-let comicNumber = "";
-let url = `https://xkcd.now.sh/?comic=latest`;
-let jsonData = {};
-const collapse = document.querySelector('.collapsible');
-
-function getComic(url){
-  fetch(url)
-      .then(res => res.json()) // parse response as JSON
-      .then(data => {
-        console.log(data)
-        jsonData = data;
-        console.log(jsonData)
-        pushComic();
-      })
-      .catch(err => {
-          console.log(`error ${err}`)
-      });
-}
-
-function randomComic() {
-  comicNumber = Math.floor(Math.random() * 2634);
-  console.log(comicNumber)
-  if (comicNumber === 0) {
-    url = "https://xkcd.now.sh/?comic=latest";
-    getComic(url);
-  } else {
-    url = `https://xkcd.now.sh/?comic=${comicNumber}`;
-    getComic(url);
+class NewComic {
+  constructor(comicNumber, url, data){
+    this.comicNumber = comicNumber;
+    this.url = url;
+    this.data = data;
+    this.img = document.querySelector('img');
+    this.h1 = document.querySelector('h1');
+    this.a = document.querySelector('a');
+    this.p = document.querySelector('p');
+  }
+  get() {
+    fetch(this.url)
+        .then(res => res.json()) // parse response as JSON
+        .then(data => {
+          this.data = data;
+          this.push();
+        })
+        .catch(err => {
+            console.log(`error ${err}`)
+        });
+  }
+  random() {
+    this.comicNumber = Math.floor(Math.random() * 2634);
+    if (this.comicNumber === 0) {
+      this.url = "https://xkcd.now.sh/?comic=latest";
+    } else {
+      this.url = `https://xkcd.now.sh/?comic=${this.comicNumber}`;
+    }
+      this.get();
+  }
+  push() {
+    h1.innerText = this.data.safe_title;
+    img.src = this.data.img;
+    img.alt = this.data.alt;
+    if (this.comicNumber === 0) {
+      a.href = `https://xkcd.com/`;
+    } else {
+      a.href = `https://xkcd.com/${this.comicNumber}`;
+    }
+    p.innerText = this.data.transcript;
   }
 }
 
-function pushComic() {
-  document.querySelector('h1').innerText = jsonData.safe_title;
-  document.querySelector('img').src = jsonData.img;
-  document.querySelector('img').alt = jsonData.alt;
-  if (comicNumber === 0) {
-    document.querySelector('a').href = `https://xkcd.com/`;
-  } else {
-    document.querySelector('a').href = `https://xkcd.com/${comicNumber}`;
-  }
-  document.querySelector('p').innerText = jsonData.transcript;
-}
-
-function collapseTranscript() {
-  collapse.classList.toggle('active');
+function collapse() {
+  document.querySelector('.collapsible').classList.toggle('active');
   let content = this.nextElementSibling;
   if (content.style.display === "block") {
     content.style.display = "none";
@@ -51,5 +51,7 @@ function collapseTranscript() {
   }
 }
 
-document.querySelector('#randomComic').addEventListener('click', randomComic)
-collapse.addEventListener('click', collapseTranscript)
+const newComic = new NewComic(0, `https://xkcd.now.sh/?comic=latest`, {})
+
+document.querySelector('#randomComic').addEventListener('click', () => newComic.random())
+document.querySelector('.collapsible').addEventListener('click', collapse)
