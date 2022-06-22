@@ -29,15 +29,15 @@ class NewComic {
       this.get();
   }
   push() {
-    h1.innerText = this.data.safe_title;
-    img.src = this.data.img;
-    img.alt = this.data.alt;
+    this.h1.innerText = this.data.safe_title;
+    this.img.src = this.data.img;
+    this.img.alt = this.data.alt;
     if (this.comicNumber === 0) {
-      a.href = `https://xkcd.com/`;
+      this.a.href = `https://xkcd.com/`;
     } else {
-      a.href = `https://xkcd.com/${this.comicNumber}`;
+      this.a.href = `https://xkcd.com/${this.comicNumber}`;
     }
-    p.innerText = this.data.transcript;
+    this.p.innerText = this.data.transcript;
   }
 }
 

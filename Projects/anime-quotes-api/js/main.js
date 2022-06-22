@@ -1,94 +1,94 @@
+class MakeQuote {
+  constructor(url) {
+    this.url = url;
+    this.data = {};
+    this.isArray = false;
+    this.arrPosition = 0;
+    this.anime = document.querySelector(".anime");
+    this.character = document.querySelector(".character")
+    this.quote = document.querySelector(".quote")
+  }
+  getQuote() {
+    fetch(this.url)
+      .then(res => res.json()) // parse response as JSON
+      .then(data => {
+        this.data = data;
+        if (Array.isArray(this.data)) {
+          this.isArray = true;
+        } else {
+          this.isArray = false;          
+        }
+        this.pushQuote();        
+      })
+      .catch(err => {
+        this.anime.innerText = "Do not understand the input!";
+        this.character.innerText = "";
+        this.quote.innerText = "";
+    });
+  }
+  pushQuote() {
+  if (this.isArray === false) {
+    this.anime.innerText = this.data.anime;
+    this.character.innerText = this.data.character;
+    this.quote.innerText = this.data.quote;
+  } else {
+    if (this.data.length > 1) {
+      this.anime.innerText = this.data[this.arrPosition].anime;
+      this.character.innerText = this.data[this.arrPosition].character;
+      this.quote.innerText = this.data[this.arrPosition].quote;
+      } else {
+        this.anime.innerText = this.data[0].anime;
+        this.character.innerText = this.data[0].character;
+        this.quote.innerText = this.data[0].quote;
+      } 
+    }
+  }
+}
+
+class CheckingInputs {
+  constructor(radioVar, inputVar) {
+    this.inputVar = inputVar;
+    this.radioVar = radioVar;
+    this.url = "https://animechan.vercel.app/api/";
+    this.anime = document.querySelector(".anime");
+    this.character = document.querySelector(".character")
+    this.quote = document.querySelector(".quote")
+  }
+  checkInputs() {
+    if (this.radioVar === 'random') {
+      this.url = `${this.url}random`;
+    } else if (this.radioVar === 'anime' && this.inputVar !== "") {
+      this.url = `${this.url}quotes/anime?title=${encodeURI(this.inputVar)}`;
+    } else if (this.radioVar === 'character' && this.inputVar !== "") {
+      this.url = `${this.url}quotes/character?name=${encodeURI(this.inputVar)}`;
+    } else {
+      this.anime.innerText = "Do not understand the input!";
+      this.character.innerText = "";
+      this.quote.innerText = "";
+    }
+    const newQuote = new MakeQuote(this.url)
+    newQuote.getQuote()
+  }
+  cycleQuotes() {
+    if(this.arrPosition < this.data.length - 1) {
+      this.arrPosition++;
+      this.checkInputs();
+    } else {
+      this.arrPosition = 0;
+      this.checkInputs();
+    }
+  }
+}
+
 //Variables
 let radioVariable = "";
 let inputVariable = "";
 let arrPosition = 0;
 let jsonData = {};
 let url = "https://animechan.vercel.app/api/"
-const anime = document.querySelector(".anime")
-const character = document.querySelector(".character")
-const quote = document.querySelector(".quote")
+element = document.getElementsByName('quote-type');
 
-//Check which radio button is pushed
-function displayRadioValue() {
-  let element = document.getElementsByName('quote-type');
-  for (let i = 0; i < element.length; i++) {
-    if(element[i].checked) {
-      radioVariable = element[i].value;
-    }
-  }
 
-}
-
-//Fetch Quote Function 
-function getQuote(url) {
-  console.log(url)
-  fetch(url)
-    .then(res => res.json()) // parse response as JSON
-    .then(data => {
-      jsonData = data;
-      console.log(data)
-      if (Array.isArray(data)) {
-        console.log("is an array")
-        pushQuoteArray(data);
-      } else {
-        console.log("is not an array")
-        pushRandomQuote(data);
-      }
-    })
-    .catch(err => {
-      anime.innerText = "Do not understand the input!";
-      character.innerText = "";
-      quote.innerText = "";
-  });
-}
-
-function pushRandomQuote(data) {
-  anime.innerText = data.anime;
-  character.innerText = data.character;
-  quote.innerText = data.quote;
-}
-
-function pushQuoteArray(data) {
-  if (data.length > 1) {
-  anime.innerText = data[arrPosition].anime;
-  character.innerText = data[arrPosition].character;
-  quote.innerText = data[arrPosition].quote;
-  } else {
-    anime.innerText = data[0].anime;
-    character.innerText = data[0].character;
-    quote.innerText = data[0].quote;
-  }
-
-}
-
-//Choose which method to run depending on what radio button is checked and the input
-function checkInputs() {
-  inputVariable = document.querySelector('#text').value.toLowerCase();
-  
-
-  if (radioVariable === 'random') {
-    getQuote(`${url}random`);
-  } else if (radioVariable === 'anime' && inputVariable !== "") {
-    console.log(inputVariable)
-    getQuote(`${url}quotes/anime?title=${encodeURI(inputVariable)}`);
-  } else if (radioVariable === 'character' && inputVariable !== "") {
-    getQuote(`${url}quotes/character?name=${encodeURI(inputVariable)}`);
-  } else {
-    anime.innerText = "Do not understand the input!";
-    character.innerText = "";
-    quote.innerText = "";
-  }
-}
-
-function cycleQuotes() {
-  if(arrPosition < jsonData.length - 1) {
-    arrPosition++;
-    checkInputs();
-  } else {
-    arrPosition = 0;
-    checkInputs();
-  }
-}
 
 function showAllAnime() {
   fetch('https://animechan.vercel.app/api/available/anime')
@@ -110,6 +110,21 @@ function showAllAnime() {
   });
 }
 
-document.querySelector('#getQuote').addEventListener('click', checkInputs);
-document.querySelector('#cycleQuote').addEventListener('click', cycleQuotes);
+function displayRadioValue() {
+  let radioVar = 0;
+  let inputVar = document.querySelector('#text').value.toLowerCase();
+
+  for (let i = 0; i < element.length; i++) {
+    if(element[i].checked) {
+      radioVar = element[i].value;
+    }
+  }  
+  
+  const checkInputs = new CheckingInputs(radioVar, inputVar);
+  checkInputs.checkInputs();
+}
+
+
+document.querySelector('#getQuote').addEventListener('click', () => {displayRadioValue});
+document.querySelector('#cycleQuote').addEventListener('click', () => {checkInputs.cycleQuotes});
 document.querySelector('#showAll').addEventListener('click', showAllAnime);
